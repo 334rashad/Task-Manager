@@ -1,21 +1,23 @@
+let tasks = [{ id: 1, name: 'Sample Task', completed: false }];
+
 const getAllTasks = (req, res) => {
-    res.send('Get all tasks');
+    res.json({tasks});
 };
 
 const createTask = (req, res) => {
-    res.send('Create a new task');
+    res.json(req.body);
 };
 
 const getTask = (req, res) => {
-    res.send('Get a single task');
+    res.json({ id: req.params.id });
 };
 
 const updateTask = (req, res) => {
-    res.send('Update a task');
+    res.json({ id: req.params.id });
 };
 
 const deleteTask = (req, res) => {
-    res.send('Delete a task');
+    res.json({ id: req.params.id });
 };
 
 module.exports = {
