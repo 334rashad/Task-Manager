@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const tasksRouter = require('./routes/tasks');
+const connectDB = require('./db/connect');
 
 // Middleware
 
@@ -14,6 +15,16 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+const start = async () => {
+  try {
+    await connectDB("url");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to the database', error);
+  }
+};
+
+start();
