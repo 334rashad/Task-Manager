@@ -1,23 +1,57 @@
-let tasks = [{ id: 1, name: 'Sample Task', completed: false }];
+const Task = require('../models/Task');
 
-const getAllTasks = (req, res) => {
-    res.json({tasks});
+const getAllTasks = async (req, res) => {
+    try {
+        const tasks = await Task.find({});
+        res.status(200).json({tasks});
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
 };
 
-const createTask = (req, res) => {
-    res.json(req.body);
+const createTask = async (req, res) => {
+    try {
+        const task = await Task.create(req.body);
+        res.status(201).json({task});
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
 };
 
-const getTask = (req, res) => {
-    res.json({ id: req.params.id });
+const getTask = async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+        res.json({ task });
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
 };
 
-const updateTask = (req, res) => {
-    res.json({ id: req.params.id });
+const updateTask = async (req, res) => {
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+        res.json({ task });
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
 };
 
-const deleteTask = (req, res) => {
-    res.json({ id: req.params.id });
+const deleteTask = async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id);
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+        res.json({ task, deleted: true });
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
 };
 
 module.exports = {
@@ -27,3 +61,5 @@ module.exports = {
     updateTask,
     deleteTask
 };
+
+
