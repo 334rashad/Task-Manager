@@ -356,7 +356,7 @@ form > :last-child {
 .single-task h5 {
   margin-bottom: 0;
 }
-.single-task span {
+.single-task h5 > span {
   display: inline-block;
   width: 0.5rem;
   height: 0.5rem;
@@ -373,6 +373,29 @@ form > :last-child {
 }
 .task-completed .fa-check-circle {
   visibility: visible;
+}
+.task-content {
+  min-width: 0;
+}
+.task-priority-label {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--borderRadius);
+  font-size: var(--smallText);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.task-priority-high {
+  color: var(--red-dark);
+  background: var(--red-light);
+}
+.task-priority-medium {
+  color: var(--primary-700);
+  background: var(--primary-50);
+}
+.task-priority-low {
+  color: var(--green-dark);
+  background: var(--green-light);
 }
 .loading-text {
   visibility: hidden;

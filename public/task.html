@@ -18,8 +18,12 @@
       <form class="single-task-form">
         <h4>Edit Task</h4>
         <div class="form-control">
-          <label>Task ID</label>
-          <p class="task-edit-id"></p>
+          <label for="priority">Priority</label>
+          <select name="priority" id="priority" class="task-edit-priority">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
         </div>
         <div class="form-control">
           <label for="name">Name</label>

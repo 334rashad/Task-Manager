@@ -2,6 +2,7 @@ const tasksDOM = document.querySelector('.tasks')
 const loadingDOM = document.querySelector('.loading-text')
 const formDOM = document.querySelector('.task-form')
 const taskInputDOM = document.querySelector('.task-input')
+const taskPriorityDOM = document.querySelector('.task-priority')
 const formAlertDOM = document.querySelector('.form-alert')
 // Load tasks from /api/tasks
 const showTasks = async () => {
@@ -18,8 +19,16 @@ const showTasks = async () => {
     const allTasks = tasks
       .map((task) => {
         const { completed, _id: taskID, name } = task
+        const priority = ['high', 'medium', 'low'].includes(task.priority)
+          ? task.priority
+          : 'medium'
+        const priorityLabel =
+          priority.charAt(0).toUpperCase() + priority.slice(1)
         return `<div class="single-task ${completed && 'task-completed'}">
+<div class="task-content">
 <h5><span><i class="far fa-check-circle"></i></span>${name}</h5>
+<span class="task-priority-label task-priority-${priority}">${priorityLabel}</span>
+</div>
 <div class="task-links">
 
 
@@ -68,11 +77,13 @@ tasksDOM.addEventListener('click', async (e) => {
 formDOM.addEventListener('submit', async (e) => {
   e.preventDefault()
   const name = taskInputDOM.value
+  const priority = taskPriorityDOM.value || 'medium'
 
   try {
-    await axios.post('/api/v1/tasks', { name })
+    await axios.post('/api/v1/tasks', { name, priority })
     showTasks()
     taskInputDOM.value = ''
+    taskPriorityDOM.value = ''
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = `success, task added`
     formAlertDOM.classList.add('text-success')
