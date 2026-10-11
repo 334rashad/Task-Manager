@@ -1,4 +1,4 @@
-const taskIDDOM = document.querySelector('.task-edit-id')
+const taskPriorityDOM = document.querySelector('.task-edit-priority')
 const taskNameDOM = document.querySelector('.task-edit-name')
 const taskCompletedDOM = document.querySelector('.task-edit-completed')
 const editFormDOM = document.querySelector('.single-task-form')
@@ -13,14 +13,12 @@ const showTask = async () => {
     const {
       data: { task },
     } = await axios.get(`/api/v1/tasks/${id}`)
-    const { _id: taskID, completed, name } = task
+    const { priority, completed, name } = task
 
-    taskIDDOM.textContent = taskID
+    taskPriorityDOM.value = priority
     taskNameDOM.value = name
     tempName = name
-    if (completed) {
-      taskCompletedDOM.checked = true
-    }
+    taskCompletedDOM.checked = completed
   } catch (error) {
     console.log(error)
   }
@@ -34,22 +32,22 @@ editFormDOM.addEventListener('submit', async (e) => {
   try {
     const taskName = taskNameDOM.value
     const taskCompleted = taskCompletedDOM.checked
+    const taskPriority = taskPriorityDOM.value
 
     const {
       data: { task },
     } = await axios.patch(`/api/v1/tasks/${id}`, {
       name: taskName,
       completed: taskCompleted,
+      priority: taskPriority,
     })
 
-    const { _id: taskID, completed, name } = task
+    const { priority, completed, name } = task
 
-    taskIDDOM.textContent = taskID
+    taskPriorityDOM.value = priority
     taskNameDOM.value = name
     tempName = name
-    if (completed) {
-      taskCompletedDOM.checked = true
-    }
+    taskCompletedDOM.checked = completed
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = `success, edited task`
     formAlertDOM.classList.add('text-success')
