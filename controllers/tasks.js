@@ -1,5 +1,6 @@
 const Task = require('../models/Task');
 const asyncWrapper = require('../middleware/async');
+const { createCustomError } = require('../errors/custom-error');
 
 const getAllTasks = asyncWrapper(async (req, res) => {
     const tasks = await Task.find({});
@@ -11,28 +12,31 @@ const createTask = asyncWrapper(async (req, res) => {
     res.status(201).json({task});
 });
 
-const getTask = asyncWrapper(async (req, res) => {
-    const task = await Task.findById(req.params.id);
+const getTask = asyncWrapper(async (req, res, next) => {
+    const { id: taskId } = req.params;
+    const task = await Task.findById(taskId);
     if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        return next(createCustomError(`No task with id: ${taskId}`, 404));
     }
-    res.json({ task });
+    res.status(200).json({ task });
 });
 
-const updateTask = asyncWrapper(async (req, res) => {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after', runValidators: true });
+const updateTask = asyncWrapper(async (req, res, next) => {
+    const { id: taskId } = req.params;
+    const task = await Task.findByIdAndUpdate(taskId, req.body, { returnDocument: 'after', runValidators: true });
     if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        return next(createCustomError(`No task with id: ${taskId}`, 404));
     }
-    res.json({ task });
+    res.status(200).json({ task });
 });
 
-const deleteTask = asyncWrapper(async (req, res) => {
-    const task = await Task.findByIdAndDelete(req.params.id);
+const deleteTask = asyncWrapper(async (req, res, next) => {
+    const { id: taskId } = req.params;
+    const task = await Task.findByIdAndDelete(taskId);
     if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        return next(createCustomError(`No task with id: ${taskId}`, 404));
     }
-    res.json({ task, deleted: true });
+    res.status(200).json({ task, deleted: true });
 });
 
 module.exports = {
